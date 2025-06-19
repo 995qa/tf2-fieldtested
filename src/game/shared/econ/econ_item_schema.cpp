@@ -2306,6 +2306,7 @@ m_bIsPackBundle( false ),
 m_pOwningPackBundle( NULL ),
 m_bIsPackItem( false ),
 m_bBaseItem( false ),
+m_bModItem( true ),
 m_pszItemLogClassname( NULL ),
 m_pszItemIconClassname( NULL ),
 m_pszDatabaseAuditTable( NULL ),
@@ -2874,6 +2875,30 @@ void CEconStyleInfo::BInitFromKV( KeyValues *pKVStyle, CUtlVector<CUtlString> *p
 		m_iBodygroupSubmodelIndex = pKVBodygroup->GetInt( "submodel_index", -1 );
 		Assert( m_iBodygroupSubmodelIndex != -1 );
 	}
+
+	// Tossable Bread - Styles can now change pose parameters!
+	perteamvisuals_t *pVisData = new perteamvisuals_t();
+	KeyValues *pKVPose_Player = pKVStyle->FindKey( "player_poseparam" );
+	if ( pKVPose_Player )
+	{
+		FOR_EACH_SUBKEY( pKVPose_Player, pKVSubKey )
+		{
+			poseparamtable_t *pPoseParam = pVisData->m_PlayerPoseParams.AddToTailGetPtr();
+			pPoseParam->strName = pKVSubKey->GetName();
+			pPoseParam->flValue = pKVSubKey->GetFloat();
+		}
+	}
+
+	KeyValues *pKVPose_Item = pKVStyle->FindKey( "item_poseparam" );
+	if ( pKVPose_Item )
+	{
+		FOR_EACH_SUBKEY( pKVPose_Item, pKVSubKey )
+		{
+			poseparamtable_t *pPoseParam = pVisData->m_ItemPoseParams.AddToTailGetPtr();
+			pPoseParam->strName = pKVSubKey->GetName();
+			pPoseParam->flValue = pKVSubKey->GetFloat();
+		}
+	}
 }
 
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
@@ -3177,6 +3202,7 @@ bool CEconItemDefinition::BInitFromKV( KeyValues *pKVItem, CUtlVector<CUtlString
 	m_bHidden = m_pKVItem->GetInt( "hidden", 0 ) != 0;
 	m_bShouldShowInArmory = m_pKVItem->GetInt( "show_in_armory", 0 ) != 0;
 	m_bBaseItem = m_pKVItem->GetInt( "baseitem", 0 ) != 0;
+	m_bModItem = m_pKVItem->GetInt("moditem", 0) != 0;
 	m_pszItemLogClassname = m_pKVItem->GetString( "item_logname", NULL );
 	m_pszItemIconClassname = m_pKVItem->GetString( "item_iconname", NULL );
 	m_pszDatabaseAuditTable = m_pKVItem->GetString( "database_audit_table", NULL );
@@ -3805,6 +3831,7 @@ CEconItemSchema::CEconItemSchema( )
 ,	m_mapToolsItems( DefLessFunc(int) )
 ,	m_mapPaintKitTools( DefLessFunc(uint32) )
 ,	m_mapBaseItems( DefLessFunc(int) )
+,	m_mapModItems( DefLessFunc(int) )
 ,	m_unVersion( 0 )
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
 ,	m_pDefaultItemDefinition( NULL )
@@ -4299,6 +4326,7 @@ void CEconItemSchema::Reset( void )
 	m_mapToolsItems.Purge();
 	m_mapPaintKitTools.Purge();
 	m_mapBaseItems.Purge();
+	m_mapModItems.Purge();
 	m_mapRecipes.PurgeAndDeleteElements();
 	m_vecTimedRewards.Purge();
 	m_dictItemSets.PurgeAndDeleteElements();
@@ -4418,7 +4446,8 @@ bool CEconItemSchema::BInitTextBuffer( CUtlBuffer &buffer, CUtlVector<CUtlString
 
 	Reset();
 	m_pKVRawDefinition = new KeyValues( "CEconItemSchema" );
-	if ( m_pKVRawDefinition->LoadFromBuffer( NULL, buffer ) )
+	//if ( m_pKVRawDefinition->LoadFromBuffer( NULL, buffer ) )
+	if (m_pKVRawDefinition->LoadFromFile(g_pFullFileSystem, "scripts/items/items_custom.txt", "GAME"))
 	{
 		return BInitSchema( m_pKVRawDefinition, pVecErrors )
 			&& BPostSchemaInit( pVecErrors );
@@ -5273,6 +5302,7 @@ bool CEconItemSchema::BInitItems( KeyValues *pKVItems, CUtlVector<CUtlString> *p
 	m_mapToolsItems.Purge();
 	m_mapPaintKitTools.Purge();
 	m_mapBaseItems.Purge();
+	m_mapModItems.Purge();
 	m_vecBundles.Purge();
 	m_mapQuestObjectives.PurgeAndDeleteElements();
 
@@ -5341,6 +5371,10 @@ bool CEconItemSchema::BInitItems( KeyValues *pKVItems, CUtlVector<CUtlString> *p
 				if ( pItemDef->IsBaseItem() )
 				{
 					m_mapBaseItems.Insert( nItemIndex, pItemDef );
+				}
+				if ( pItemDef->IsModItem() )
+				{
+					m_mapModItems.Insert(nItemIndex, pItemDef);
 				}
 
 				// Cache off bundles for the link phase below.

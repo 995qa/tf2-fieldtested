@@ -514,7 +514,7 @@
 			"image"			"glyph_multiplayer"
 		}		
 	}
-	
+			
 	"MenuBG"
 	{
 		"ControlName"	"EditablePanel"
@@ -533,7 +533,7 @@
 			"ControlName"	"CExLabel"
 			"fieldName"		"TitleLabel"
 			"font"			"HudFontSmallBold"
-			"labelText"		"Team Fortress 2: Field Tested"
+			"labelText"		"PLAY"
 			"textAlignment"	"west"
 			"xpos"			"12"
 			"ypos"			"0"
@@ -547,7 +547,6 @@
 			"fgcolor_override"	"235 227 203 255"
 		}
 	}
-
 
 // The following items I cant remove rn
 	"ReportPlayerButton"
