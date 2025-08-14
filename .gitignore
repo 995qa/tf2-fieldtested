@@ -37,6 +37,7 @@ ipch
 obj*/
 !devtools/*.mak
 !utils/smdlexp/smdlexp.mak
+*.a
 
 # Specific Source build products
 client.pdb
@@ -48,6 +49,9 @@ server.lib
 
 mod_tf_win64.exe
 mod_tf_win64.pdb
+tfft_win64.exe
+tfft_win64.pdb
+tfft_linux64
 
 client.so
 client.so.dbg
