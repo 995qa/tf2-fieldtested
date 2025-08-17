@@ -41,6 +41,9 @@ obj*/
 !devtools/*.mak
 !utils/smdlexp/smdlexp.mak
 *.a
+.ninja_deps
+.ninja_log
+
 
 # Specific Source build products
 client.pdb
