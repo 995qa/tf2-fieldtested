@@ -2,7 +2,7 @@
 {
 	"itemtest"
 	{
-		"viewed"		"82"
+		"viewed"		"89"
 	}
 	"koth_dune_a2"
 	{
@@ -23,5 +23,9 @@
 	"ctf_doublecross"
 	{
 		"viewed"		"1"
+	}
+	"ctf_2fort"
+	{
+		"viewed"		"2"
 	}
 }

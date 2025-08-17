@@ -229,6 +229,7 @@
 			"mouse_pressed_sound"	"ui/item_knife_large_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 		}
+		// TODO: Fix secondaries not working when this is equipped
 		"32008"
 		{
 			"name"		"scoutsmg"
@@ -245,5 +246,55 @@
 				"scout"		"primary"
 			}
 		}
+		"32009"
+		{
+			"name"		"fastthrower"
+			"moditem"	"1"
+			"prefab"	"weapon_flamethrower"
+			"item_name"	"#TF_Weapon_FastThrower"
+
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_reflect_projectiles"	"1"
+				"can_extinguish"			"1"
+				"can_deal_posthumous_damage"	"1"
+				"can_deal_critical_damage"	"1"
+				"is_flamethrower" "1"
+			}
+
+			"attributes"
+			{
+				"flame ammopersec increased"
+				{
+					"attribute_class"	"mult_flame_ammopersec"
+					"value"		"1.20"
+				}
+				"flame life bonus"
+				{
+					"attribute_class"	"mult_flame_life"
+					"value"		"1.30"
+				}
+				"damage bonus"
+				{
+					"attribute_class"	"mult_dmg"
+					"value"		"1.50"
+				}
+				"weapon burn time reduced"
+				{
+					"attribute_class"	"mult_wpn_burntime"
+					"value"		"0.50"
+				}
+				"airblast cost increased"
+				{
+					"attribute_class"	"mult_airblast_cost"
+					"value"		"2"
+				}
+			}
+		}
+	}
+	"attributes"
+	{
+		// :P
 	}
 }

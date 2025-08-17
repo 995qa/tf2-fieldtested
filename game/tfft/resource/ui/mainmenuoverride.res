@@ -547,7 +547,6 @@
 			"fgcolor_override"	"235 227 203 255"
 		}
 	}
-
 // The following items I cant remove rn
 	"ReportPlayerButton"
 	{
