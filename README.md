@@ -17,6 +17,16 @@ I used the model and textures to make the AK.
 
 
 
+## Code credits
+
+[Better Fortress 2](https://github.com/ALIEN31ITA/Better-Fortress-2)
+
+Used their custom item schema to make custom weapons work
+
+[Bitl](https://github.com/Bitl)
+
+Helped me fix an error when trying to equip custom weapons
+
 
 ## License
 
