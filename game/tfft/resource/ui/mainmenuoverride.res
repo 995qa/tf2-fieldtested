@@ -547,26 +547,6 @@
 			"fgcolor_override"	"235 227 203 255"
 		}
 	}
-
-	"VersionLabel"
-	{
-		"ControlName"		"CExLabel"
-		"fieldName"			"VersionLabel"
-		"xpos"				"r525"
-		"ypos"				"0"
-		"zpos"				"5"
-		"wide"				"520"
-		"tall"				"40"
-		"autoResize"		"0"
-		"pinCorner"			"0"
-		"visible"			"1"
-		"enabled"			"1"
-		"labelText"			"VersionLabel"
-		"textAlignment"		"north-east"
-		"fgcolor"			"HudOffWhite"
-		"font"				"MenuSmallFont"
-	}
-
 // The following items I cant remove rn
 	"ReportPlayerButton"
 	{
