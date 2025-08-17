@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 //=============================================================================
 
@@ -49,6 +49,8 @@
 using namespace GCSDK;
 
 #define LOCAL_LOADOUT_FILE		"cfg/local_loadout.txt"
+
+ConVar tf_cosmetic_restrictions("tf_cosmetic_restrictions", "1", FCVAR_REPLICATED, "Disable holiday restrictions on items.");
 
 #ifdef CLIENT_DLL
 //-----------------------------------------------------------------------------
@@ -953,6 +955,7 @@ void CTFPlayerInventory::UpdateCachedServerLoadoutItems()
 	V_memcpy( m_CachedServerLoadoutItems, m_LoadoutItems, sizeof( itemid_t ) * ARRAYSIZE( m_CachedServerLoadoutItems ) * ARRAYSIZE( m_CachedServerLoadoutItems[0] ) );
 }
 	
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -1032,6 +1035,7 @@ void CTFPlayerInventory::LoadLocalLoadout()
 	pLoadoutKV->deleteThis();
 
 	GTFGCClientSystem()->LocalInventoryChanged();
+	SendInventoryUpdateEvent();
 }
 
 //-----------------------------------------------------------------------------
@@ -1565,6 +1569,7 @@ CEconItemView *CTFPlayerInventory::GetItemInLoadout( int iClass, int iSlot )
 					CEconItemView* pItem = TFInventoryManager()->GetModItem(i);
 					if (pItem && pItem->GetItemDefIndex() == m_LoadoutItems[iClass][iSlot])
 					{
+						//DevMsg( "Using mod item: %d\n", m_LoadoutItems[iClass][iSlot] );
 						if (pItem && AreSlotsConsideredIdentical(pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot(iClass), iSlot))
 							return pItem;
 					}
@@ -1594,6 +1599,22 @@ CEconItemView *CTFPlayerInventory::GetCacheServerItemInLoadout( int iClass, int 
 		// we need to validate their position on the server when we retrieve them.
 		if ( pItem && AreSlotsConsideredIdentical( pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot( iClass ), iSlot ) )
 			return pItem;
+
+		if (m_CachedServerLoadoutItems[iClass][iSlot] < 100000)
+		{
+			int count = TFInventoryManager()->GetModItemCount();
+			for (int i = 0; i < count; i++)
+			{
+				CEconItemView* pItem = TFInventoryManager()->GetModItem(i);
+				if (pItem && pItem->GetItemDefIndex() == m_CachedServerLoadoutItems[iClass][iSlot])
+				{
+					//DevMsg( "Using cached mod item: %d\n", m_CachedServerLoadoutItems[iClass][iSlot] );
+					if (pItem && AreSlotsConsideredIdentical(pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot(iClass), iSlot))
+						return pItem;
+				}
+			}
+			return TFInventoryManager()->AddModItem( m_CachedServerLoadoutItems[iClass][iSlot] );
+		}
 	}
 
 	return TFInventoryManager()->GetBaseItemForClass( iClass, iSlot );
@@ -2051,7 +2072,7 @@ CON_COMMAND_F( item_dumpinv_other, "Dumps the contents of a specified client inv
 #endif
 #endif // _DEBUG
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 #if defined(CLIENT_DLL)
 CON_COMMAND_F( item_dumpinv, "Dumps the contents of a specified client inventory. Format: item_dumpinv", FCVAR_CHEAT )
 #else
@@ -2075,7 +2096,7 @@ CON_COMMAND_F( item_dumpinv_sv, "Dumps the contents of a specified server invent
 
 	pInventory->DumpInventoryToConsole( true );
 }
-#endif
+//#endif
 
 #ifdef _DEBUG
 #if defined(CLIENT_DLL)
@@ -2179,6 +2200,130 @@ CON_COMMAND(clear_loadout_ui, "Clear local loadout back to stock defaults (show 
 		} );
 }
 #endif	// TF_CLIENT_DLL
+
+#if defined( CLIENT_DLL )
+CON_COMMAND_F( cl_reload_item_schema, "Reload the item schema from items_game.txt and items_custom.txt on the client", FCVAR_CHEAT )
+{
+	DevMsg("Reloading item schema on client...\n");
+	
+	// Reload the main schema file
+	CUtlVector< CUtlString > vecErrors;
+	bool bSuccess = ItemSystem()->GetItemSchema()->BInit("scripts/items/items_game.txt", "GAME", &vecErrors);
+	
+	if( !bSuccess )
+	{
+		FOR_EACH_VEC( vecErrors, nError )
+		{
+			Warning( "%s\n", vecErrors[nError].String() );
+		}
+		DevMsg("Failed to reload main item schema!\n");
+		return;
+	}
+	
+	// Try to load custom items if the file exists
+	if ( g_pFullFileSystem->FileExists( "scripts/items/items_custom.txt", "GAME" ) )
+	{
+		DevMsg("Loading custom items from items_custom.txt...\n");
+		vecErrors.Purge();
+		
+		// Create a KeyValues object to load the custom items
+		KeyValues *pKVCustom = new KeyValues( "ItemsCustom" );
+		if ( pKVCustom->LoadFromFile( g_pFullFileSystem, "scripts/items/items_custom.txt", "GAME" ) )
+		{
+			// Try to merge the custom items into the schema
+			KeyValues *pKVItems = pKVCustom->FindKey( "items" );
+			if ( pKVItems )
+			{
+				DevMsg("Found custom items section, attempting to merge...\n");
+				// Note: This is a simplified approach - ideally we'd need to merge properly
+				// but for now this will reload the base schema and the custom file will 
+				// be handled by the existing BInitTextBuffer override
+			}
+		}
+		pKVCustom->deleteThis();
+	}
+	
+	// Clear and regenerate base items
+	TFInventoryManager()->GenerateBaseItems();
+	
+	// Reload the inventory
+	TFInventoryManager()->PostInit();
+	
+	// Refresh attributes on all players without reconnecting
+	C_TFPlayer *pLocalPlayer = C_TFPlayer::GetLocalTFPlayer();
+	if ( pLocalPlayer )
+	{
+		// Update the local player's inventory
+		pLocalPlayer->UpdateInventory( true );
+		
+		// Reapply provision (attributes) on the local player
+		pLocalPlayer->ReapplyProvision();
+		
+		// Mark that local inventory has changed
+		GTFGCClientSystem()->LocalInventoryChanged();
+		
+		DevMsg("Refreshed attributes and inventory for local player.\n");
+	}
+	
+	// Refresh attributes on all other players in the game
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		C_TFPlayer *pPlayer = ToTFPlayer( UTIL_PlayerByIndex( i ) );
+		if ( pPlayer && pPlayer != pLocalPlayer && pPlayer->IsAlive() )
+		{
+			// Reapply provision (attributes) on this player
+			pPlayer->ReapplyProvision();
+		}
+	}
+	
+	DevMsg("Item schema reloaded successfully and attributes refreshed.\n");
+}
+#else
+CON_COMMAND_F( sv_reload_item_schema, "Reload the item schema from items_game.txt on the server", FCVAR_CHEAT )
+{
+	DevMsg("Reloading item schema on server...\n");
+	
+	// Reload the main schema file
+	CUtlVector< CUtlString > vecErrors;
+	bool bSuccess = ItemSystem()->GetItemSchema()->BInit("scripts/items/items_game.txt", "GAME", &vecErrors);
+	
+	if( !bSuccess )
+	{
+		FOR_EACH_VEC( vecErrors, nError )
+		{
+			Warning( "%s\n", vecErrors[nError].String() );
+		}
+		DevMsg("Failed to reload main item schema!\n");
+		return;
+	}
+	
+	DevMsg("Note: Custom items (items_custom.txt) are handled on the client side.\n");
+	
+	// Clear and regenerate base items
+	TFInventoryManager()->GenerateBaseItems();
+	
+	// Reload the inventory
+	TFInventoryManager()->PostInit();
+	
+	// Refresh attributes on all players without reconnecting
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CTFPlayer *pPlayer = ToTFPlayer( UTIL_PlayerByIndex( i ) );
+		if ( pPlayer && pPlayer->IsAlive() )
+		{
+			// Update the player's inventory
+			pPlayer->UpdateInventory( true );
+			
+			// Reapply provision (attributes) on this player
+			pPlayer->ReapplyProvision();
+			
+			DevMsg("Refreshed attributes and inventory for player %d.\n", i);
+		}
+	}
+	
+	DevMsg("Item schema reloaded successfully and attributes refreshed.\n");
+}
+#endif
 
 #if defined( TF_CLIENT_DLL ) && INVENTORY_VIA_WEBAPI
 bool CTFInventoryManager::LoadPreset(equipped_class_t unClass, equipped_preset_t unPreset)

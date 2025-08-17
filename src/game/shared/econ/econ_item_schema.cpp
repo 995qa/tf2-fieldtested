@@ -2875,30 +2875,6 @@ void CEconStyleInfo::BInitFromKV( KeyValues *pKVStyle, CUtlVector<CUtlString> *p
 		m_iBodygroupSubmodelIndex = pKVBodygroup->GetInt( "submodel_index", -1 );
 		Assert( m_iBodygroupSubmodelIndex != -1 );
 	}
-
-	// Tossable Bread - Styles can now change pose parameters!
-	perteamvisuals_t *pVisData = new perteamvisuals_t();
-	KeyValues *pKVPose_Player = pKVStyle->FindKey( "player_poseparam" );
-	if ( pKVPose_Player )
-	{
-		FOR_EACH_SUBKEY( pKVPose_Player, pKVSubKey )
-		{
-			poseparamtable_t *pPoseParam = pVisData->m_PlayerPoseParams.AddToTailGetPtr();
-			pPoseParam->strName = pKVSubKey->GetName();
-			pPoseParam->flValue = pKVSubKey->GetFloat();
-		}
-	}
-
-	KeyValues *pKVPose_Item = pKVStyle->FindKey( "item_poseparam" );
-	if ( pKVPose_Item )
-	{
-		FOR_EACH_SUBKEY( pKVPose_Item, pKVSubKey )
-		{
-			poseparamtable_t *pPoseParam = pVisData->m_ItemPoseParams.AddToTailGetPtr();
-			pPoseParam->strName = pKVSubKey->GetName();
-			pPoseParam->flValue = pKVSubKey->GetFloat();
-		}
-	}
 }
 
 #if defined(CLIENT_DLL) || defined(GAME_DLL)
@@ -4433,17 +4409,11 @@ bool CEconItemSchema::BInitBinaryBuffer( CUtlBuffer &buffer, CUtlVector<CUtlStri
 	return false;
 }
 
-unsigned char g_sha1ItemSchemaText[ k_cubHash ];
-
 //-----------------------------------------------------------------------------
 // Initializes the schema, given KV in text form
 //-----------------------------------------------------------------------------
 bool CEconItemSchema::BInitTextBuffer( CUtlBuffer &buffer, CUtlVector<CUtlString> *pVecErrors /* = NULL */ )
 {
-	// Save off the hash into a global variable, so VAC can check it
-	// later
-	GenerateHash( g_sha1ItemSchemaText, buffer.Base(), buffer.TellPut() );
-
 	Reset();
 	m_pKVRawDefinition = new KeyValues( "CEconItemSchema" );
 	//if ( m_pKVRawDefinition->LoadFromBuffer( NULL, buffer ) )

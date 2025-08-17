@@ -10,7 +10,7 @@
 	}
 	"items"
 	{
-		"20015"
+		"32005"
 		{
 			"name"	"Crowbar"
 			"item_class"	"saxxy"
@@ -83,7 +83,7 @@
 			"mouse_pressed_sound"	"ui/item_metal_weapon_pickup.wav"
 			"drop_sound"		"ui/item_metal_weapon_drop.wav"
 		}
-		"20016"
+		"32006"
 		{
 			"name" 		"AK47"
 			"enabled"	"1"
@@ -105,6 +105,8 @@
 			"inspect_panel_dist" "39"
 			"show_in_armory"	"1"
 			"item_type_name"	"#TF_Weapon_AR"
+			"min_ilevel"	"15"
+			"max_ilevel"	"15"
 			"item_name"	"#TF_Weapon_AK"
 			"item_slot"	"secondary"
 			"item_quality"		"unique"
@@ -177,6 +179,71 @@
 			}
 			"xifier_class_remap"	"weapon_smg"
 			"particle_suffix"		"smg"
+		}
+		"32007"
+		{
+			"name"		"genericsword"
+			"moditem"	"1"
+			"prefab"	"weapon_sword"
+			"capabilities"
+			{
+				"nameable"		"1"
+			}
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_be_equipped_by_soldier_or_demo"	"1"
+				"can_deal_critical_damage"	"1"
+			}
+			"item_type_name"	"#TF_Weapon_Sword"
+			"item_name"			"#TF_Weapon_GenericSword"
+			"image_inventory"	"backpack/weapons/c_models/c_claymore/c_claymore"
+			"model_player"	"models/weapons/c_models/c_claymore/c_claymore.mdl"
+			"item_description"	"#TF_GenericSword_Desc"
+			"static_attrs"
+			{
+				"min_viewmodel_offset"			"10 -3 -10"
+				"weapon_stattrak_module_scale"		"0.455"
+			}
+			"used_by_classes"
+			{
+				"demoman"	"1"
+			}
+			"attributes"
+			{
+				"is_a_sword"
+				{
+					"attribute_class"	"is_a_sword"
+					"value"				"72"
+				}
+			}
+			"visuals"
+			{
+				"sound_melee_miss"	"Weapon_Sword.Swing"
+				"sound_melee_hit"	"Weapon_Sword.HitFlesh"
+				"sound_melee_hit_world"	"Weapon_Sword.HitWorld"
+				"sound_burst"		"Weapon_Sword.SwingCrit"
+				"sound_special1"	"Sword.Hit"
+				"sound_special2"	"Sword.Idle"
+			}
+			"mouse_pressed_sound"	"ui/item_knife_large_pickup.wav"
+			"drop_sound"		"ui/item_metal_weapon_drop.wav"
+		}
+		"32008"
+		{
+			"name"		"scoutsmg"
+			"moditem"	"1"
+			"prefab"	"weapon_smg"
+			"tags"
+			{
+				"can_deal_damage"			"1"
+				"can_deal_critical_damage"	"1"
+			}
+			"item_name"			"#TF_Weapon_ScoutSMG"
+			"used_by_classes"
+			{
+				"scout"		"primary"
+			}
 		}
 	}
 }

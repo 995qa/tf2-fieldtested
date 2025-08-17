@@ -2,13 +2,16 @@
 
 # Demo files
 *.dem
-mod_tf/demos
+tfft/demos
 
-# Map files
-mod_tf/maps
+# Nav mesh/Node graph
+*.ain
+*.nav
 
 # Configs
-mod_tf/cfg
+tfft/cfg
+tfft/tf2_playerstats.dmx
+tfft/videoconfig*.cfg
 
 # Visual Studio 
 *.suo
