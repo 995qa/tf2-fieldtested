@@ -181,6 +181,11 @@
 					"attribute_class"	"set_weapon_mode"
 					"value"	"1"
 				}
+				"headshot damage decrease"
+				{
+					"attribute_class"	"headshot_damage_modify"
+					"value"	"0.50"
+				}
 			}
 			"xifier_class_remap"	"weapon_smg"
 			"particle_suffix"		"smg"
@@ -346,6 +351,15 @@
 	}
 	"attributes"
 	{
-		// :P
+		"4000"
+		{
+			"name"	"headshot damage decrease"
+			"attribute_class"	"headshot_damage_modify"
+			"description_string"	"#Attrib_HeadshotDamageDecrease"
+			"description_format"	"value_is_percentage"
+			"hidden"	"0"
+			"effect_type"	"negative"
+			"stored_as_integer"	"0"
+		}
 	}
 }

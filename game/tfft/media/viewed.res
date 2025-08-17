@@ -2,7 +2,7 @@
 {
 	"itemtest"
 	{
-		"viewed"		"90"
+		"viewed"		"92"
 	}
 	"koth_dune_a2"
 	{
