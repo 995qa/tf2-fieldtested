@@ -174,7 +174,12 @@
 				"damage bonus"
 				{
 					"attribute_class"	"mult_dmg"
-					"value"	"2"
+					"value"	"1.75"
+				}
+				"revolver use hit locations"
+				{
+					"attribute_class"	"set_weapon_mode"
+					"value"	"1"
 				}
 			}
 			"xifier_class_remap"	"weapon_smg"
