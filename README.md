@@ -1,62 +1,6 @@
 # TF2: Field Tested
 
-TF2:FT is a mod for TF2 which is planned to add new weapons and revert some weapons.
-I have reverted the following weapons:
-
-Baby Face Blaster
-
-Backburner
-
-Bushwacka
-
-Razorback
-
-Tribalman's Shiv
-
-Your Eternal Reward
-
-
-
-Some weapons have some stats reverted, but some stats stay:
-
-Spycicle (Now has Silent Killer)
-
-Weapons I may add:
-
-
-## Fast-Thrower (Pyro) (to-do)
-
-+30% Flame Velocity
-
-+30% Damage
-
--50% Afterburn time
-
-+100% Airblast cost
-
-+20% Ammo cost
-
-
-## Kalashnikov (Sniper) (implemented, need to change backpack icon)
-
-(Comparing to Sniper SMG)
-
-+100% damage
-
--25% bullet spread
-
-+25% reload time
-
--15 Health
-
-No random crits
-
-## Crowbar (All-Class) (implemented, need to fix backpack icon)
-
-Reskin of the Frying Pan
-
-
-## If you have any weapon ideas, dm me
+TF2:FT is a mod for TF2 that adds new weapons and convars.
 
 # Credits
 
