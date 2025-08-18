@@ -43,3 +43,4 @@ protoc binary
 ccache binary
 
 *_english.txt text
+*_english.txt diff
