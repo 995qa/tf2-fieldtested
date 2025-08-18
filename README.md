@@ -4,7 +4,7 @@ TF2:FT is a mod for TF2 that adds new weapons and convars.
 
 # Credits
 
-I'm not an animator or modeler, so I have used the following mod's assets for this:
+I'm not an animator or modeler, so I have used the following mod's assets for some of the weapons:
 
 [TF2 All-Class Crowbar (SFM Beta version)](https://gamebanana.com/mods/198771)
 
