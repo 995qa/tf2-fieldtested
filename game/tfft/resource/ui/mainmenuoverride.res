@@ -561,7 +561,7 @@
 		}
 	}
 // The following items I cant remove rn
-	"ReportPlayerButton"
+/*	"ReportPlayerButton"
 	{
 		"ControlName"	"EditablePanel"
 		"fieldname"		"ReportPlayerButton"
@@ -584,5 +584,5 @@
 		"ControlName"	"EditablePanel"
 		"fieldName"		"CallVoteButton"
 		"visible"	"0"
-	}
+	} */
 }

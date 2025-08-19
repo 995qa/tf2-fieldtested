@@ -1,4 +1,9 @@
 "Resource/UI/MatchMakingDashboard.res"
 {
-// STUB
+	"MMDashboard"
+	{
+		"fieldName"				"MMDashboard"
+		"visible"				"0"
+		"enabled"				"0"
+	}
 }

@@ -183,11 +183,11 @@ CHudMainMenuOverride::CHudMainMenuOverride( IViewPort *pViewPort ) : BaseClass( 
 	m_iCurrentMOTD = -1;
 	m_bInitMOTD = false;
 
-	m_pMOTDPanel = NULL;
+/*	m_pMOTDPanel = NULL;
 	m_pMOTDShowPanel = NULL;
 	m_pMOTDURLButton = NULL;
 	m_pMOTDNextButton = NULL;
-	m_pMOTDPrevButton = NULL;
+	m_pMOTDPrevButton = NULL; */
 	m_iNotiPanelWide = 0;
 
 	m_bReapplyButtonKVs = false;
@@ -230,7 +230,7 @@ CHudMainMenuOverride::CHudMainMenuOverride( IViewPort *pViewPort ) : BaseClass( 
 	m_pRankModelPanel = new CPvPRankPanel( this, "rankmodelpanel" );
 
 	// Create our MOTD scrollable section
-	m_pMOTDPanel = new vgui::EditablePanel( this, "MOTD_Panel" );
+/*	m_pMOTDPanel = new vgui::EditablePanel( this, "MOTD_Panel" );
 	m_pMOTDPanel->SetVisible( true );
 	m_pMOTDTextPanel = new vgui::EditablePanel( this, "MOTD_TextPanel" );
 	m_pMOTDTextScroller = new vgui::ScrollableEditablePanel( m_pMOTDPanel, m_pMOTDTextPanel, "MOTD_TextScroller" );
@@ -244,7 +244,7 @@ CHudMainMenuOverride::CHudMainMenuOverride( IViewPort *pViewPort ) : BaseClass( 
 	m_pMOTDTextScroller->GetScrollbar()->GetButton(1)->SetPaintBackgroundEnabled( false );
 	m_pMOTDTextScroller->GetScrollbar()->SetAutoResize( PIN_TOPRIGHT, AUTORESIZE_DOWN, -24, 0, -16, 0 );
 
-	m_pMOTDTextLabel = NULL;
+	m_pMOTDTextLabel = NULL; */
 
 	m_pNotificationsShowPanel = NULL;
 	m_pNotificationsPanel = new vgui::EditablePanel( this, "Notifications_Panel" );
@@ -584,14 +584,14 @@ void CHudMainMenuOverride::ApplySchemeSettings( IScheme *scheme )
 	m_bIsDisconnectText = true;
 
 	// Tell all the MOTD buttons that we want their messages
-	m_pMOTDPrevButton = dynamic_cast<CExImageButton*>( m_pMOTDPanel->FindChildByName("MOTD_PrevButton") );
+/*	m_pMOTDPrevButton = dynamic_cast<CExImageButton*>( m_pMOTDPanel->FindChildByName("MOTD_PrevButton") );
 	m_pMOTDNextButton = dynamic_cast<CExImageButton*>( m_pMOTDPanel->FindChildByName("MOTD_NextButton") );
-	m_pMOTDURLButton = dynamic_cast<CExButton*>( m_pMOTDPanel->FindChildByName("MOTD_URLButton") );
+	m_pMOTDURLButton = dynamic_cast<CExButton*>( m_pMOTDPanel->FindChildByName("MOTD_URLButton") ); */
 
 
 
 	m_iNotiPanelWide = m_pNotificationsPanel->GetWide();
-	vgui::EditablePanel* pHeaderContainer = dynamic_cast<vgui::EditablePanel*>( m_pMOTDPanel->FindChildByName( "MOTD_HeaderContainer" ) );
+/*	vgui::EditablePanel* pHeaderContainer = dynamic_cast<vgui::EditablePanel*>( m_pMOTDPanel->FindChildByName( "MOTD_HeaderContainer" ) );
 	if ( pHeaderContainer )
 	{
 		m_pMOTDHeaderLabel = dynamic_cast<vgui::Label*>( pHeaderContainer->FindChildByName( "MOTD_HeaderLabel" ) );
@@ -611,7 +611,7 @@ void CHudMainMenuOverride::ApplySchemeSettings( IScheme *scheme )
 	if ( m_pMOTDTitleImageContainer )
 	{
 		m_pMOTDTitleImage = dynamic_cast<vgui::ImagePanel*>( m_pMOTDTitleImageContainer->FindChildByName("MOTD_TitleImage") );
-	}
+	} */
 
 	m_pNotificationsScroller->GetScrollbar()->SetAutohideButtons( true );
 	m_pNotificationsScroller->GetScrollbar()->SetPaintBorderEnabled( false );
@@ -1200,7 +1200,7 @@ void CHudMainMenuOverride::OnConfirm( KeyValues *pParams )
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CHudMainMenuOverride::UpdateMOTD( bool bNewMOTDs )
+/*void CHudMainMenuOverride::UpdateMOTD( bool bNewMOTDs )
 {
 	return;
 
@@ -1407,14 +1407,14 @@ void CHudMainMenuOverride::UpdateMOTD( bool bNewMOTDs )
 			m_pMOTDShowPanel->SetVisible( false );
 		}
 	}
-}
+} */
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 void CHudMainMenuOverride::SetMOTDButtonVisible( bool bVisible )
 {
-	if (m_pMOTDShowPanel)
+/*	if (m_pMOTDShowPanel)
 	{
 		m_pMOTDShowPanel->SetVisible(false);
 	}
@@ -1440,7 +1440,7 @@ void CHudMainMenuOverride::SetMOTDButtonVisible( bool bVisible )
 		{
 			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( m_pMOTDShowPanel, "HasMOTDBlinkStop" );
 		}
-	}
+	} */
 }
 
 //-----------------------------------------------------------------------------
@@ -1448,7 +1448,7 @@ void CHudMainMenuOverride::SetMOTDButtonVisible( bool bVisible )
 //-----------------------------------------------------------------------------
 void CHudMainMenuOverride::SetMOTDVisible( bool bVisible )
 {
-	m_pMOTDPanel->SetVisible( bVisible );
+/*	m_pMOTDPanel->SetVisible( bVisible );
 
 	if ( bVisible )
 	{
@@ -1468,7 +1468,7 @@ void CHudMainMenuOverride::SetMOTDVisible( bool bVisible )
 	{
 		SetMOTDButtonVisible( true );
 		UpdateNotifications();
-	}
+	} */
 }
 
 //-----------------------------------------------------------------------------
@@ -1481,7 +1481,7 @@ void CHudMainMenuOverride::SetQuestMapVisible( bool bVisible )
 	if ( bVisible )
 	{
 		GetQuestMapPanel()->InvalidateLayout( true );
-		SetMOTDVisible( false );
+//		SetMOTDVisible( false );
 		SetNotificationsPanelVisible( false );
 		//SetWatchStreamVisible( false );
 	}
@@ -1854,7 +1854,7 @@ void CHudMainMenuOverride::OnCommand( const char *command )
 	{
 		GetClientModeTFNormal()->GameUI()->SendMainMenuCommand( "engine opentf2options" );
 	}
-	else if ( !Q_stricmp( command, "motd_prev" ) )
+/*	else if ( !Q_stricmp( command, "motd_prev" ) )
 	{
 		if ( m_iCurrentMOTD > 0 )
 		{
@@ -1879,7 +1879,7 @@ void CHudMainMenuOverride::OnCommand( const char *command )
 	else if ( !Q_stricmp( command, "motd_hide" ) )
 	{
 		SetMOTDVisible( false );
-	}
+	} */
 	else if ( !Q_stricmp( command, "noti_show" ) )
 	{
 		SetNotificationsPanelVisible( true );
@@ -2368,7 +2368,7 @@ public:
 
 		// And tell the main menu to refresh the MOTD.
 		//pMMPanel->SetMOTDVisible( bNewMOTDs ); HACK!  Temporarily turn this off!
-		pMMPanel->UpdateMOTD( bNewMOTDs );
+//		pMMPanel->UpdateMOTD( bNewMOTDs );
 		return true;
 	}
 };
