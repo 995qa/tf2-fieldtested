@@ -65,7 +65,7 @@ bool CanScatterGunKnockBack( CTFWeaponBase *pWeapon, float flDamage, float flDis
 //-----------------------------------------------------------------------------
 CTFShotgun::CTFShotgun()
 {
-	m_bReloadsSingly = true;
+		m_bReloadsSingly = true;
 }
 
 //-----------------------------------------------------------------------------
